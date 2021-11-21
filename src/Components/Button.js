@@ -7,7 +7,7 @@ const ColorButton = props => {
   return (
     <TouchableOpacity
       style={{
-        flex: 1,
+        flex: Number(props.flex),
         padding: 4,
         justifyContent: 'center',
         alignItems: 'center',
@@ -31,7 +31,7 @@ const OutlineButton = props => {
   return (
     <TouchableOpacity
       style={{
-        flex: 1,
+        flex: Number(props.flex),
         padding: 4,
         justifyContent: 'center',
         alignItems: 'center',
@@ -53,11 +53,13 @@ const OutlineButton = props => {
 ColorButton.defaultProps = {
   color: theme.mainColor,
   title: 'Button',
+  flex: 0,
 }
 
 OutlineButton.defaultProps = {
   color: theme.mainColor,
   title: 'Button',
+  flex: 0,
 }
 
 export {ColorButton, OutlineButton};

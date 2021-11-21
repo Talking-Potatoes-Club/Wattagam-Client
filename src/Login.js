@@ -42,9 +42,12 @@ const LoginPage = ({navigation}) => {
           >
             <OutlineButton
               title="회원가입"
+              onPress={() => navigation.navigate('SignUp')}
+              flex="1"
             />
             <ColorButton 
               title="로그인"
+              flex="1"
             />
           </View>
           <TouchableOpacity
@@ -64,7 +67,6 @@ const LoginPage = ({navigation}) => {
 
 const styles=StyleSheet.create({
   TextBox:{
-    // width: '100%',
     alignContent: 'flex-start',
     margin: 4,
     padding: 8,
