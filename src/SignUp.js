@@ -60,6 +60,7 @@ const SignUpPage = ({navigation}) => {
   )
 }
 
+
 const SignUpSuccess = ({navigation}, props) => {
   return(
     <View

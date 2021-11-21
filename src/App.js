@@ -1,6 +1,6 @@
 import React from "react";
 import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity} from 'react-native';
-import LoginPage from "./Login";
+import {LoginPage, FindPW} from "./Login";
 import Home from "./Home";
 import {SignUpPage, SignUpSuccess} from "./SignUp";
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,6 +18,7 @@ const App = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
         <Stack.Screen name="SignUpSuccess" component={SignUpSuccess}/>
+        <Stack.Screen name="FindPW" component={FindPW}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
