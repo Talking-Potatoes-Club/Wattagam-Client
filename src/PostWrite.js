@@ -78,6 +78,7 @@ const PostWrite = ({navigation}) => {
 
 const styles=StyleSheet.create({
   ImageBox:{
+    backgroundColor: '#CCCCCC',
     width: '90%',
     height: undefined,
     aspectRatio: 1,
