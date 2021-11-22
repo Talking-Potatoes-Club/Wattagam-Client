@@ -1,6 +1,6 @@
 import React from "react";
 import { theme } from "../Theme"
-import { StyleSheet, TouchableOpacity, Button, View, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, Image, Platform } from 'react-native';
 import { ThemeColors } from "react-navigation";
 
 const ColorButton = props => {
@@ -50,6 +50,46 @@ const OutlineButton = props => {
   )
 }
 
+const ImageButton = (props) => {
+  let BGColor = props.color;
+  let ContentColor = "#ffffff";
+
+  if (props.whiteBackground == "true"){
+    BGColor = "#ffffff";
+    ContentColor = props.color;
+  }
+  
+  return (
+    <TouchableOpacity
+      onPressOut={props.onPressOut}
+      style={{
+        padding: 8,
+        margin: 8,
+        width: Number(props.size),
+        height: Number(props.size),
+        borderRadius: Number(props.size) / 2,
+        backgroundColor: BGColor,
+        justifyContent: "center",
+        alignItems: "center",
+        ...Platform.select({
+          android: {
+            elevation: 5,
+          }
+        })
+      }}
+    >
+      <Image
+        style={{
+          width: Number(props.size) * 0.7,
+          height: Number(props.size) * 0.7,
+          tintColor: ContentColor,
+        }}
+        source={props.type}
+      />
+    </TouchableOpacity>
+  )
+}
+
 ColorButton.defaultProps = {
   color: theme.mainColor,
   title: 'Button',
@@ -62,4 +102,10 @@ OutlineButton.defaultProps = {
   flex: 0,
 }
 
-export {ColorButton, OutlineButton};
+ImageButton.defaultProps = {
+  color: theme.mainColor,
+  size: "25",
+  whiteBackground: "false",
+}
+
+export {ColorButton, OutlineButton, ImageButton};
