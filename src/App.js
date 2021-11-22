@@ -7,6 +7,7 @@ import CameraPage from './Camera';
 
 import { NavigationContainer } from "@react-navigation/native";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import PostWrite from "./PostWrite";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const App = () => {
         <Stack.Screen name="SignUpSuccess" component={SignUpSuccess}/>
         <Stack.Screen name="FindPW" component={FindPW}/>
         <Stack.Screen name="Camera" component={CameraPage}/>
+        <Stack.Screen name="PostWrite" component={PostWrite}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
