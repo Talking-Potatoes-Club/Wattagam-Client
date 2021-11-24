@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, PermissionsAndroid } from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { ColorButton, ImageButton } from "./Components/Button";
 import { images } from './Images'
+import BubbleMarker from "./Components/bubbleMarker";
 
 const requestPermission = async () => {
   try {
@@ -56,7 +57,11 @@ const Home = ({navigation}) => {
           latitudeDelta: 0.001,
           longitudeDelta: 0.002,
         }}
-      />
+      >
+        <Marker coordinate={{latitude: latitude, longitude: longitude}}>
+          <BubbleMarker src="../../assets/bear.jpg"/>
+        </Marker>
+      </MapView>
       <View style={{flexDirection: "row", width: '100%', position: "absolute", bottom: 30, alignItems: "center", justifyContent: "center"}}>
         <ImageButton
           type={images.peopleIcon}
