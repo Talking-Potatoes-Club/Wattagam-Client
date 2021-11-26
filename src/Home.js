@@ -67,6 +67,7 @@ const Home = ({navigation}) => {
           type={images.peopleIcon}
           size="50"
           whiteBackground="true"
+          onPressOut={() => navigation.navigate('SingleArticle')}
         />
         <ImageButton
           type={images.cameraIcon}
