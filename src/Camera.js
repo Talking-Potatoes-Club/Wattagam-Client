@@ -1,17 +1,38 @@
 import React from "react";
-import {View, Text} from "react-native";
-import { ColorButton } from "./Components/Button";
+import {View, Text, Image, StyleSheet} from "react-native";
+import { ImageButton } from "./Components/Button";
+import { images } from './Images';
 
 const CameraPage = ({navigation}) => {
   return(
     <View>
-      <Text> Hello This is Camera Page </Text>
-      <ColorButton
-        title="게시글 작성하기"
-        onPress={() => navigation.navigate("PostWrite")}
+      <Image
+        source={require('../assets/temp.png')}
+        style={styles.image}
       />
+      <View style={{position: "absolute", top: 16, left: 16}}>
+        <ImageButton
+          type={images.backIcon}
+          size="36"
+          whiteBackground="true"
+        />
+      </View>
+      <View style={{flexDirection: "row", width: '100%', position: "absolute", bottom: 30, alignItems: "center", justifyContent: "center"}}>
+        <ImageButton
+          type={images.cameraIcon}
+          size="70"
+          onPressOut={() => navigation.navigate('PostWrite')}
+        />
+      </View>
     </View>
   )
 }
 
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  }
+})
 export default CameraPage;

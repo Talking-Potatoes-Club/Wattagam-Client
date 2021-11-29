@@ -3,6 +3,7 @@ import MyPageIcon from '../assets/icon/MyPage.png';
 import PeopleIcon from '../assets/icon/People.png';
 import LocationIcon from '../assets/icon/Location.png';
 import MoreIcon from '../assets/icon/More.png';
+import BackIcon from '../assets/icon/Back.png';
 
 export const images={
   cameraIcon: PhotoCameraIcon,
@@ -10,4 +11,5 @@ export const images={
   peopleIcon: PeopleIcon,
   locationIcon : LocationIcon,
   MoreIcon: MoreIcon,
+  backIcon: BackIcon,
 }
