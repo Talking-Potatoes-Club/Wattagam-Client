@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity} from 'react-native';
 import { theme } from "./Theme";
 import {ColorButton, OutlineButton} from "./Components/Button";
+import axios from "axios";
 
 const SignUpPage = ({navigation}) => {
+  const [email, onChangeEmail] = useState("");
+  const [password, onChangePW] = useState("");
+  const [userName, onChangeUsername] = useState("");
+  const [isFailed, onFailed] = useState(0);
   return (
     <View
       style={{
@@ -26,17 +31,20 @@ const SignUpPage = ({navigation}) => {
           }}
         >
           <TextInput
-            style={styles.TextBox}
+            style={[styles.TextBox, isFailed == 500 ? {borderColor: theme.dangerColor} : null]}
             placeholder="Username"
+            onChangeText={text => onChangeUsername(text)}
           />
           <TextInput
-            style={styles.TextBox}
+            style={[styles.TextBox, isFailed == 500 ? {borderColor: theme.dangerColor} : null]}
             placeholder="email"
+            onChangeText={text => onChangeEmail(text)}
           />
           <TextInput
             style={styles.TextBox}
             placeholder="Password"
             secureTextEntry={true}
+            onChangeText={text => onChangePW(text)}
           />
           <View
             style={{
@@ -50,10 +58,30 @@ const SignUpPage = ({navigation}) => {
             />
             <ColorButton 
               title="회원가입"
-              onPress={() => navigation.reset({routes: [{name: 'SignUpSuccess'}]})}
+              onPress={() => {
+                console.log(userName + ", " + email + ", " + password);
+                axios.post('http://wattagam-test-server.herokuapp.com/account/signUp', {
+                  email : email,
+                  password : password,
+                  user_name : userName,
+                  bio: "안녕하세요! " + userName + "입니다.",
+                })
+                .then((response) => {
+                  console.log(response);
+                  navigation.reset({routes: [{name: 'SignUpSuccess'}]});
+                })
+                .catch((error) => {
+                  console.log(error.response);
+                  onFailed(error.response.status);
+                });
+                
+              }}
               flex="1"
             />
           </View>
+          <Text style={{color: theme.dangerColor, alignSelf: "center"}}>
+              {isFailed == 400? "입력한 이름이 이미 존재합니다." : (isFailed == 500 ? "입력한 이메일이 이미 존재합니다" : "")}
+            </Text>
         </View>
       </View>
     </View>

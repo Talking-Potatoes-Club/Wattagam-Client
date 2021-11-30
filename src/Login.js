@@ -1,10 +1,15 @@
-import React from "react";
+import React , {useState} from "react";
 import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity} from 'react-native';
 import { theme } from "./Theme";
 import {ColorButton, OutlineButton} from "./Components/Button";
-
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginPage = ({navigation}) => {
+  const [email, onChangeEmail] = useState("");
+  const [password, onChangePW] = useState("");
+  const [isFailed, onFailed] = useState(false);
+
   return (
     <View
       style={{
@@ -29,11 +34,13 @@ const LoginPage = ({navigation}) => {
           <TextInput
             style={styles.TextBox}
             placeholder="ID"
+            onChangeText={(text)=>onChangeEmail(text)}
           />
           <TextInput
             style={styles.TextBox}
             placeholder="Password"
             secureTextEntry={true}
+            onChangeText={(text)=>onChangePW(text)}
           />
           <View
             style={{
@@ -48,6 +55,26 @@ const LoginPage = ({navigation}) => {
             <ColorButton 
               title="로그인"
               flex="1"
+              onPress={() => {
+                console.log(email + ", " + password);
+                axios.post('http://wattagam-test-server.herokuapp.com/account/logIn', {
+                  email : email,
+                  password : password,
+                })
+                .then((response) => {
+                  console.log(response);
+                  console.log(response.data.token);
+                  AsyncStorage.setItem('token', response.data.token);
+                  AsyncStorage.getItem('token', (error, result) => {
+                    console.log("Token Saved : " + result);
+                  });
+                  navigation.navigate("Home");
+                })
+                .catch((error) => {
+                  console.log(error);
+                  onFailed(true);
+                });
+              }}
             />
           </View>
           <TouchableOpacity
@@ -68,6 +95,7 @@ const LoginPage = ({navigation}) => {
           >
             <Text style={{color: theme.mainColor}}> Guest 모드로 사용하기 </Text>
           </TouchableOpacity>
+          <Text style={{color: theme.dangerColor, alignSelf: "center"}}>{isFailed?"아이디 또는 비밀번호를 확인해주세요.":""}</Text>
         </View>
       </View>
     </View>

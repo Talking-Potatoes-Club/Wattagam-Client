@@ -4,7 +4,7 @@ import {LoginPage, FindPW} from "./Login";
 import Home from "./Home";
 import {SignUpPage, SignUpSuccess} from "./SignUp";
 import CameraPage from './Camera';
-
+import SingleArticle from "./Components/SingleArticle";
 import { NavigationContainer } from "@react-navigation/native";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PostWrite from "./PostWrite";
@@ -26,6 +26,7 @@ const App = () => {
         <Stack.Screen name="FindPW" component={FindPW}/>
         <Stack.Screen name="Camera" component={CameraPage}/>
         <Stack.Screen name="PostWrite" component={PostWrite}/>
+        <Stack.Screen name="SingleArticle" component={SingleArticle} />
         <Stack.Screen name="MyPage" component={MyPage}/>
         <Stack.Screen name="EditProfile" component={EditProfile}/>
       </Stack.Navigator>

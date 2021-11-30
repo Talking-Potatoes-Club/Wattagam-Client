@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, PermissionsAndroid } from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { ColorButton, ImageButton } from "./Components/Button";
 import { images } from './Images'
+import BubbleMarker from "./Components/bubbleMarker";
+import LandMark from "./Components/LandMark";
 
 const requestPermission = async () => {
   try {
@@ -26,8 +28,8 @@ const requestPermission = async () => {
 };
 
 const Home = ({navigation}) => {
-  const [latitude, setLatitude] = useState(37.5504);
-  const [longitude, setLongitude] = useState(126.9407);
+  const [latitude, setLatitude] = useState(37.555141);
+  const [longitude, setLongitude] = useState(126.936949);
   
   const granted = requestPermission();
   
@@ -56,12 +58,30 @@ const Home = ({navigation}) => {
           latitudeDelta: 0.001,
           longitudeDelta: 0.002,
         }}
-      />
+      >
+        <Marker coordinate={{latitude: 37.556101, longitude: 126.935822}}>
+          <BubbleMarker num="8"/>
+        </Marker>
+
+        <Marker coordinate={{latitude: 37.555727, longitude: 126.937056}}>
+          <BubbleMarker num="5"/>
+        </Marker>
+
+        <Marker coordinate={{latitude: 37.556448, longitude: 126.937166}}>
+          <BubbleMarker num="9"/>
+        </Marker>
+
+        <Marker coordinate={{latitude: 37.557008, longitude: 126.936718}}>
+          <LandMark num="25"/>
+        </Marker>
+
+      </MapView>
       <View style={{flexDirection: "row", width: '100%', position: "absolute", bottom: 30, alignItems: "center", justifyContent: "center"}}>
         <ImageButton
           type={images.peopleIcon}
           size="50"
           whiteBackground="true"
+          onPressOut={() => navigation.navigate('SingleArticle')}
         />
         <ImageButton
           type={images.cameraIcon}
