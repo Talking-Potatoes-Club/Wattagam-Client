@@ -4,50 +4,42 @@ import { theme } from "./Theme";
 import {ColorButton, OutlineButton, ImageButton } from "./Components/Button";
 import { images } from './Images'
 
+const img = require('../assets/bear.jpg');
+const imgProps = Image.resolveAssetSource(img);
+
 const PostWrite = ({navigation}) => {
   return (
     <View
       style={{
         flex: 1,
-        flexDirection: "column",
       }}
     >
-      <View
-        style={{
+        <View
+          style={{
+          flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          flex: 2,
+          flexDirection: "column",
         }}
-      >
+        >
+
         <ImageButton
           type={images.locationIcon}
           size="60"
           whiteBackground="true"
         />
         <Text style={{color: theme.mainColor}}> 위치를 선택해 주세요! </Text>
-      </View>
+ 
 
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 5,
-        }}
-      >           
         <Image
-            style={styles.ImageBox}
-            source={require('../assets/bear.jpg')}/>
-      </View>
+          style={imgProps.height >= imgProps.width ? styles.ImageBoxWithAspectRatio : styles.ImageBox}
+          source={img}
+        />
+       
 
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-        }}
-      >
         <TextInput
             style={styles.TextBox}
+            multiline
             placeholder="문구 입력"
           />
       </View>
@@ -57,10 +49,13 @@ const PostWrite = ({navigation}) => {
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "row",
-          flex: 1,
+          position: "absolute",
+          bottom:10,
+          right:0,
+          left:0,
         }}
       >
-        <OutlineButton 
+        <OutlineButton
           title="뒤로 돌아가기"
           onPress={()=>navigation.goBack()}
         />
@@ -72,16 +67,30 @@ const PostWrite = ({navigation}) => {
       </View>
 
     </View>
+
+
   )
 }
 
-
 const styles=StyleSheet.create({
+
   ImageBox:{
     backgroundColor: '#CCCCCC',
     width: '90%',
     height: undefined,
-    aspectRatio: 1,
+    resizeMode:'contain',
+    aspectRatio: 1.5,
+    margin: 4,
+    padding: 8,
+    borderRadius: theme.radius,
+    borderColor: theme.stroke,
+  },
+
+  ImageBoxWithAspectRatio:{
+    backgroundColor: '#CCCCCC',
+    width: '90%',
+    height: undefined,
+    aspectRatio: 1.5,
     resizeMode:'contain',
     margin: 4,
     padding: 8,
@@ -91,7 +100,7 @@ const styles=StyleSheet.create({
 
   TextBox:{
     width: '90%',
-    height: '60%',
+    height: '10%',
     margin: 4,
     padding: 8,
     borderWidth: 1,
