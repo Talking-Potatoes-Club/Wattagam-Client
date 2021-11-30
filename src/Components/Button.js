@@ -90,6 +90,23 @@ const ImageButton = (props) => {
   )
 }
 
+const IconButton = (props) => {
+  return(
+    <TouchableOpacity
+      onPressOut={props.onPressOut}
+    >
+      <Image 
+        style={{
+          height: Number(props.size),
+          width: Number(props.size),
+          color: props.color,
+        }}
+        source={props.type}
+      />
+    </TouchableOpacity>
+  );
+}
+
 ColorButton.defaultProps = {
   color: theme.mainColor,
   title: 'Button',
@@ -108,4 +125,9 @@ ImageButton.defaultProps = {
   whiteBackground: "false",
 }
 
-export {ColorButton, OutlineButton, ImageButton};
+IconButton.defaultProps = {
+  color: theme.ContentColor,
+  size: "24",
+}
+
+export {ColorButton, OutlineButton, ImageButton, IconButton};
