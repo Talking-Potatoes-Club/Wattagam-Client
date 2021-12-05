@@ -103,6 +103,10 @@ const LoginPage = ({navigation}) => {
 }
 
 const FindPW = ({navigation}) => {
+  const [email, onChangeEmail] = useState("");
+  const [isMailSended, onMailSended] = useState(false);
+  const [isFailed, onFailed] = useState(false);
+
   return (
     <View
       style={{flex: 1}}
@@ -120,14 +124,35 @@ const FindPW = ({navigation}) => {
           <TextInput
             style={styles.TextBox}
             placeholder="email"
+            onChangeText={(text)=>onChangeEmail(text)}
           />
           <ColorButton
             title="비밀번호 찾기"
+            onPress={()=>{
+              email!=""?
+                axios.post('http://wattagam-test-server.herokuapp.com/account/tempPassword', {
+                    email : email,
+                  })
+                  .then((response) => {
+                    console.log(email);
+                    console.log(response);
+                    onMailSended(true);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    console.log(email);
+                    onFailed(true);
+                  })
+                :onFailed(true);
+            }}
           />
           <OutlineButton
             title="로그인 페이지로 돌아가기"
             onPress={()=>navigation.reset({routes: [{name: 'Login'}]})}
           />
+          <Text style={{color: theme.dangerColor, alignSelf: "center"}}>
+            {isMailSended?"메일로 임시 비밀번호가 전송되었습니다.": isFailed?"정확한 이메일을 입력해주세요.":""}
+          </Text>
       </View>
     </View>
   )

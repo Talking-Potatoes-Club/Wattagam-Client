@@ -10,7 +10,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PostWrite from "./PostWrite";
 import MyPage from "./MyPage";
 import EditProfile from "./EditProfile";
-
+import Articles from "./Articles";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -29,6 +29,7 @@ const App = () => {
         <Stack.Screen name="SingleArticle" component={SingleArticle} />
         <Stack.Screen name="MyPage" component={MyPage}/>
         <Stack.Screen name="EditProfile" component={EditProfile}/>
+        <Stack.Screen name="Articles" component={Articles}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

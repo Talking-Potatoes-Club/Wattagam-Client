@@ -6,6 +6,7 @@ import { ColorButton, ImageButton } from "./Components/Button";
 import { images } from './Images'
 import BubbleMarker from "./Components/bubbleMarker";
 import LandMark from "./Components/LandMark";
+import axios from "axios";
 
 const requestPermission = async () => {
   try {
@@ -30,7 +31,8 @@ const requestPermission = async () => {
 const Home = ({navigation}) => {
   const [latitude, setLatitude] = useState(37.555141);
   const [longitude, setLongitude] = useState(126.936949);
-  
+  const [markers, setMarkers] = useState([]);
+
   const granted = requestPermission();
   
   useEffect(() => {
@@ -46,7 +48,19 @@ const Home = ({navigation}) => {
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
   }, []);
-  
+
+  const getMarkers = (x, y) => {
+    const url = 'http://wattagam-test-server.herokuapp.com/location/getLocationCount?x=' + x + '&y=' + y;
+
+    axios.get(url)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
   return (
     <View style={{flex: 1}}>
       <MapView
@@ -59,14 +73,6 @@ const Home = ({navigation}) => {
           longitudeDelta: 0.002,
         }}
       >
-        <Marker coordinate={{latitude: 37.556101, longitude: 126.935822}}>
-          <BubbleMarker num="8"/>
-        </Marker>
-
-        <Marker coordinate={{latitude: 37.555727, longitude: 126.937056}}>
-          <BubbleMarker num="5"/>
-        </Marker>
-
         <Marker coordinate={{latitude: 37.556448, longitude: 126.937166}}>
           <BubbleMarker num="9"/>
         </Marker>
@@ -81,7 +87,7 @@ const Home = ({navigation}) => {
           type={images.peopleIcon}
           size="50"
           whiteBackground="true"
-          onPressOut={() => navigation.navigate('SingleArticle')}
+          onPressOut={() => navigation.navigate('Articles')}
         />
         <ImageButton
           type={images.cameraIcon}
