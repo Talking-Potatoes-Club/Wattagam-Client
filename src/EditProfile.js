@@ -38,7 +38,6 @@ const EditProfile = ({navigation}) => {
       </View>
     <View
         style={{
-          padding: 16,
           alignItems: "center",
           justifyContent: 'center',
           flex: 1,
@@ -47,6 +46,7 @@ const EditProfile = ({navigation}) => {
         <Image
           style={styles.profileImage}
           source={img}
+
         />
         <View
           style={{
@@ -54,34 +54,43 @@ const EditProfile = ({navigation}) => {
             width : Dimensions.get('window').width > 300 ? (300 - 16) : '100%',
           }}
         >
-           <Text style={{color: theme.mainColor,fontSize: 12, margin: 5}}> 이름 </Text>
+           <Text style={{color: theme.mainColor,fontSize: 12, margin: 6}}> 이름 </Text>
           <TextInput
-            style={styles.TextBox}
+            style={[styles.TextBox, {marginBottom: 8}]}
             placeholder="이정원"
           />
-          <Text style={{color: theme.mainColor,fontSize: 12, margin: 5}}> 자기소개 </Text>
+          <Text style={{color: theme.mainColor,fontSize: 12, margin: 6}}> 자기소개 </Text>
           <TextInput
-            style={styles.TextBox}
-            placeholder="자기소개입니다."
+            style={[styles.TextBox, {height: 80}]}
+            multiline
+            placeholder="자기소개입니다. fdfdfdfdfdksddddddddddddddddddddddddd"
           />
-          <OutlineButton
-              title="로그아웃"
-             // onPress={() => navigation.navigate()}
-          />
-                 <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
-          <ColorButton
+  
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 7,
+              marginBottom: 7
+            }}
+          >
+            <ColorButton
               title="저장"
+              flex="1"
              // onPress={() => navigation.navigate()}
-          />
-          <ColorButton
+            />
+            <ColorButton
               title="취소"
-             // onPress={() => navigation.navigate()}
-          />
+              flex="1"
+              color={theme.dangerColor}
+              onPress={()=>navigation.goBack()}
+            />
           </View>
+
+        <OutlineButton
+          title="로그아웃"
+          // onPress={() => navigation.navigate()}
+        />
+
         </View>
       </View>
     </View>
@@ -90,8 +99,8 @@ const EditProfile = ({navigation}) => {
 
 const styles=StyleSheet.create({
   profileImage : {
-    width: 80,
-    height: 80,
+    width: 90,
+    height: 90,
     margin: 20,
     borderRadius: 20,
     borderWidth: 1,
