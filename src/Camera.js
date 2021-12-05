@@ -3,7 +3,7 @@ import {View, Text, Image, StyleSheet} from "react-native";
 import { ImageButton } from "./Components/Button";
 import { images } from './Images';
 
-const CameraPage = ({navigation}) => {
+const CameraPage = ({route, navigation}) => {
   return(
     <View>
       <Image
@@ -21,7 +21,11 @@ const CameraPage = ({navigation}) => {
         <ImageButton
           type={images.cameraIcon}
           size="70"
-          onPressOut={() => navigation.navigate('PostWrite')}
+          onPressOut={() => navigation.navigate('PostWrite', {
+            latitude: route.params.latitude,
+            longitude: route.params.longitude,
+            imgsrc: "https://postfiles.pstatic.net/MjAyMTEyMDJfMTM1/MDAxNjM4NDA1NDI4MzEy.msE8INlF5qPSg6hzcQOKJHZuyqCTHDLLV5HOhnSbgigg.vR7DetbNv7HaE51i3B0ItMWK4jhD4mXYcX0CxEaQkaAg.JPEG.so0426yeon/20200217_143556.jpg?type=w966",
+          })}
         />
       </View>
     </View>

@@ -7,6 +7,7 @@ import { images } from './Images'
 import BubbleMarker from "./Components/bubbleMarker";
 import LandMark from "./Components/LandMark";
 import axios from "axios";
+import { Constant } from "./Constant";
 
 const requestPermission = async () => {
   try {
@@ -50,7 +51,7 @@ const Home = ({navigation}) => {
   }, []);
 
   const getMarkers = (x, y) => {
-    const url = 'http://wattagam-test-server.herokuapp.com/location/getLocationCount?x=' + x + '&y=' + y;
+    const url = Constant.baseURL + 'location/getLocationCount?x=' + x + '&y=' + y;
 
     axios.get(url)
       .then((response) => {
@@ -92,7 +93,10 @@ const Home = ({navigation}) => {
         <ImageButton
           type={images.cameraIcon}
           size="70"
-          onPressOut={() => navigation.navigate('Camera')}
+          onPressOut={() => navigation.navigate('Camera', {
+            latitude: latitude,
+            longitude: longitude,
+          })}
         />
         <ImageButton
           type={images.myPageIcon}

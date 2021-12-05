@@ -3,9 +3,10 @@ import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import { theme } from "./Theme";
 import axios from "axios";
 import SingleArticle from "./Components/SingleArticle";
+import { Constant } from "./Constant";
 
 const getArticles = (id) => {
-  // axios.get("http://wattagam-test-server.herokuapp.com/location/getPictures/" + id)
+  // axios.get(Constant.baseURL + "location/getPictures/" + id)
   // .then((response)=>{
   //   return response.data.posts;
   // })
@@ -15,8 +16,8 @@ const getArticles = (id) => {
   // });
 
   return ([
-    {author: {id: "1", user_name:"SoYeon"}, created_at:"2021-11-17", postid:"1", content:"Hello World! this is a test~~~ text~~~", picture:"1"},
-    {author: {id: "2", user_name:"YeEun"}, created_at:"2021-11-18", postid:"2", content:"Hello World! this is a test~~~ text~~~", picture:"1"},
+    {author: {id: "1", user_name:"SoYeon"}, created_at:"2021-11-17", postid:"1", content:"Hello World! this is a test~~~ text~~~", picture:"https://picsum.photos/id/237/200/300"},
+    {author: {id: "2", user_name:"YeEun"}, created_at:"2021-11-18", postid:"2", content:"Hello World! this is a test~~~ text~~~", picture:"https://picsum.photos/id/237/200/300"},
   ]);
 }
 
@@ -27,7 +28,7 @@ const Articles = props => {
   // mapping it
 
   const [posts, setPosts] = useState(getArticles(props.id));
-  //const [posts, setPosts] = useState("1");
+  
   return (
     <ScrollView style={styles.back}>
       <Text style={styles.titleText}>

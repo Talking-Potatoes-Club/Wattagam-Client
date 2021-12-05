@@ -1,26 +1,64 @@
-import React from "react";
-import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity, Image} from 'react-native';
+import React, {useState, useEffect} from "react";
+import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity, Image, Alert, BackHandler} from 'react-native';
 import { theme } from "./Theme";
-import {ColorButton, OutlineButton, ImageButton } from "./Components/Button";
+import {ColorButton, OutlineButton, ImageButton,  } from "./Components/Button";
 import { images } from './Images'
+import axios from "axios";
+import { Constant } from "./Constant";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const img = require('../assets/bear.jpg');
-const imgProps = Image.resolveAssetSource(img);
+const PostWrite = ({route, navigation}) => {
+  const [contents, setContents] = useState("");  
+  
+  const [latitude, setLatitude] = useState(route.params.latitude);
+  const [longitude, setLongitude] = useState(route.params.longitude);
+  
+  //const imgsrc = route.params.imgsrc;
+  // testing
+  const imgsrc = Constant.testImg; 
+  let imageRatio = 1;
+  
+  let imgProps = {width: 0, height: 0};
+  Image.getSize(imgsrc, (width, height) => {
+    imgProps.width = width;
+    imgProps.height = height;
+    imageRatio = width / height;
+  });
 
-const PostWrite = ({navigation}) => {
+  const uploadComplete = () => {
+    Alert.alert("게시글 작성", "게시글이 업로드되었습니다!", [
+      { text: "확인", onPress: () => navigation.goBack() }
+    ]);
+  }
+
+  const backAction = () => {
+    Alert.alert("잠시만요!", "작성하던 내용이 사라집니다.\n계속하시겠습니까?", [
+      {
+        text: "취소",
+        onPress: () => null,
+      },
+      { text: "확인", onPress: () => navigation.reset({routes: [{name: 'Home'}]}) }
+    ]);
+    return true;
+  };
+
+  useEffect(()=>{
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return() => backHandler.remove();
+  }, []);
+
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
+    <View style={{ flex: 1, }} >
         <View
           style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
         >
 
         <ImageButton
@@ -28,43 +66,66 @@ const PostWrite = ({navigation}) => {
           size="60"
           whiteBackground="true"
         />
-        <Text style={{color: theme.mainColor}}> 위치를 선택해 주세요! </Text>
+        <Text style={{color: theme.mainColor, marginVertical: 10}}> {latitude + ", " + longitude} </Text>
  
-
         <Image
-          style={imgProps.height >= imgProps.width ? styles.ImageBoxWithAspectRatio : styles.ImageBox}
-          source={img}
+          style={[styles.ImageBox, imageRatio < 1 ? {aspectRatio: 1} : {aspectRatio: imageRatio}]}
+          source={{uri: imgsrc}}
         />
-       
-
+    
         <TextInput
-            style={styles.TextBox}
-            multiline
-            placeholder="문구 입력"
-          />
-      </View>
-
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
-          position: "absolute",
-          bottom:10,
-          right:0,
-          left:0,
-        }}
-      >
+          style={styles.TextBox}
+          multiline
+          placeholder="문구 입력"
+          onChangeText={(text)=>setContents(text)}
+        />
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+            // position: "absolute",
+            // bottom:10,
+            // right:0,
+            // left:0,
+          }}
+        >
         <OutlineButton
           title="뒤로 돌아가기"
-          onPress={()=>navigation.goBack()}
+          onPress={backAction}
         />
 
         <ColorButton 
           title="작성하기"
-          onPress={()=>navigation.goBack()}
+          onPress={()=>{
+            let token = "";
+            AsyncStorage.getItem('token', (error, result) => {
+              console.log("Token Loaded : " + result);
+              token = result;
+              axios.post(Constant.baseURL + "location/newPicture", {
+                x_location: latitude,
+                y_location: longitude,
+                location_name : "temp",
+                picture: imgsrc.split(',')[1],
+                contents: contents,
+              },{
+                headers: {'Authorization': `token ${token}`}
+              })
+              .then((response)=>{
+                console.log(response);
+                uploadComplete();
+              })
+              .catch((error)=>{
+                console.log(error.response);
+                console.log(latitude + ", " + longitude + ", " + token + ", " + contents);
+              })
+            });
+          }}
         />
       </View>
+      </View>
+
+      
 
     </View>
 
@@ -79,7 +140,6 @@ const styles=StyleSheet.create({
     width: '90%',
     height: undefined,
     resizeMode:'contain',
-    aspectRatio: 1.5,
     margin: 4,
     padding: 8,
     borderRadius: theme.radius,

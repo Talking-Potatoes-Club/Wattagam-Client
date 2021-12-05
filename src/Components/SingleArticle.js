@@ -47,16 +47,12 @@ const ProfileSection = props => {
 
 const SingleArticle = props => {
   //const imageSrc = "http://wattagam-test-server.herokuapp.com" + props.picture;
-  const imageSrc = "../../assets/bear.jpg"
+  const imageSrc = props.picture;
   let imageRatio = 1;
 
-  imageRatio = Image.resolveAssetSource(require(imageSrc)).width / Image.resolveAssetSource(require(imageSrc)).height;
-  
-  // ***** Is not working for local Image.
-  // ***** We have to replace it when we adjust it
-  // Image.getSize(imageSrc, (width, height) => {
-  //   imageRatio = width / height;
-  // })
+  Image.getSize(imageSrc, (width, height) => {
+    imageRatio = width / height;
+  })
   
   return (
     <View>
@@ -68,7 +64,7 @@ const SingleArticle = props => {
       <View>
         <Image
           style={[styles.contentsImage, {aspectRatio : imageRatio}]}
-          source={require(imageSrc)}
+          source={{uri: imageSrc}}
         />
         <Text style={styles.contentsText}>
           {props.content}
