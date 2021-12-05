@@ -58,7 +58,7 @@ const LoginPage = ({navigation}) => {
               flex="1"
               onPress={() => {
                 console.log(email + ", " + password);
-                axios.post(Constant.baseURL + 'account/logIn', {
+                axios.post(Constant.baseURL + '/account/logIn', {
                   email : email,
                   password : password,
                 })
@@ -131,7 +131,7 @@ const FindPW = ({navigation}) => {
             title="비밀번호 찾기"
             onPress={()=>{
               email!=""?
-                axios.post(Constant.baseURL + 'account/tempPassword', {
+                axios.post(Constant.baseURL + '/account/tempPassword', {
                     email : email,
                   })
                   .then((response) => {

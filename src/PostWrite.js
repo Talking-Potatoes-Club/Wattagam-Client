@@ -13,9 +13,9 @@ const PostWrite = ({route, navigation}) => {
   const [latitude, setLatitude] = useState(route.params.latitude);
   const [longitude, setLongitude] = useState(route.params.longitude);
   
-  //const imgsrc = route.params.imgsrc;
+  const imgsrc = route.params.imgsrc;
   // testing
-  const imgsrc = Constant.testImg; 
+  //const imgsrc = Constant.testImg; 
   let imageRatio = 1;
   
   let imgProps = {width: 0, height: 0};
@@ -102,7 +102,7 @@ const PostWrite = ({route, navigation}) => {
             AsyncStorage.getItem('token', (error, result) => {
               console.log("Token Loaded : " + result);
               token = result;
-              axios.post(Constant.baseURL + "location/newPicture", {
+              axios.post(Constant.baseURL + "/location/newPicture", {
                 x_location: latitude,
                 y_location: longitude,
                 location_name : "temp",
@@ -112,12 +112,12 @@ const PostWrite = ({route, navigation}) => {
                 headers: {'Authorization': `token ${token}`}
               })
               .then((response)=>{
-                console.log(response);
+                //console.log(response);
                 uploadComplete();
               })
               .catch((error)=>{
                 console.log(error.response);
-                console.log(latitude + ", " + longitude + ", " + token + ", " + contents);
+                //console.log(latitude + ", " + longitude + ", " + token + ", " + contents);
               })
             });
           }}
@@ -136,7 +136,7 @@ const PostWrite = ({route, navigation}) => {
 const styles=StyleSheet.create({
 
   ImageBox:{
-    backgroundColor: '#CCCCCC',
+    //backgroundColor: '#CCCCCC',
     width: '90%',
     height: undefined,
     resizeMode:'contain',
@@ -147,7 +147,7 @@ const styles=StyleSheet.create({
   },
 
   ImageBoxWithAspectRatio:{
-    backgroundColor: '#CCCCCC',
+    //backgroundColor: '#CCCCCC',
     width: '90%',
     height: undefined,
     aspectRatio: 1.5,

@@ -61,7 +61,7 @@ const SignUpPage = ({navigation}) => {
               title="회원가입"
               onPress={() => {
                 console.log(userName + ", " + email + ", " + password);
-                axios.post(Constant.baseURL + 'account/signUp', {
+                axios.post(Constant.baseURL + '/account/signUp', {
                   email : email,
                   password : password,
                   user_name : userName,

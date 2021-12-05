@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { theme } from '../Theme';
 import { IconButton } from './Button';
 import { images } from '../Images';
+import { Constant } from '../Constant';
 
-const ProfileImage = () => {
+const ProfileImage = props => {
   return (
     <Image
       style={styles.profileImage}
-      source={require('../../assets/bear.jpg')}
+      source={{uri: props.profileimg}}
     />
   )
 }
@@ -27,6 +28,7 @@ const ProfileSection = props => {
       <View style={{flexDirection: 'row',}}>
         <ProfileImage 
           style={{ marginLeft: 16, marginRight: 16 }}
+          profileimg={props.profileimg}
         />
         <View
           style={{
@@ -47,11 +49,11 @@ const ProfileSection = props => {
 
 const SingleArticle = props => {
   //const imageSrc = "http://wattagam-test-server.herokuapp.com" + props.picture;
-  const imageSrc = props.picture;
-  let imageRatio = 1;
+  const imageSrc = Constant.baseURL + props.picture;
+  const [imageRatio, setImageRatio] = useState(1);
 
   Image.getSize(imageSrc, (width, height) => {
-    imageRatio = width / height;
+    setImageRatio(width / height);
   })
   
   return (
@@ -60,14 +62,15 @@ const SingleArticle = props => {
         userid={props.userid}
         username={props.username}
         time={props.time}
+        profileimg={props.profileimg}
       /> 
       <View>
         <Image
-          style={[styles.contentsImage, {aspectRatio : imageRatio}]}
+          style={[styles.contentsImage, {aspectRatio: imageRatio}]}
           source={{uri: imageSrc}}
         />
         <Text style={styles.contentsText}>
-          {props.content}
+          {props.contents}
         </Text>
       </View>
     </View>
@@ -94,6 +97,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     resizeMode: "contain",
+    aspectRatio: 0.7,
     //backgroundColor: theme.mainColor,
   },
   contentsText: {

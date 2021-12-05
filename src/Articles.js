@@ -1,49 +1,55 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import { theme } from "./Theme";
 import axios from "axios";
 import SingleArticle from "./Components/SingleArticle";
 import { Constant } from "./Constant";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const getArticles = (id) => {
-  // axios.get(Constant.baseURL + "location/getPictures/" + id)
-  // .then((response)=>{
-  //   return response.data.posts;
-  // })
-  // .catch((error)=>{
-  //   console.log(response.data.message);
-  //   return null;
-  // });
 
-  return ([
-    {author: {id: "1", user_name:"SoYeon"}, created_at:"2021-11-17", postid:"1", content:"Hello World! this is a test~~~ text~~~", picture:"https://picsum.photos/id/237/200/300"},
-    {author: {id: "2", user_name:"YeEun"}, created_at:"2021-11-18", postid:"2", content:"Hello World! this is a test~~~ text~~~", picture:"https://picsum.photos/id/237/200/300"},
-  ]);
-}
 
-const Articles = props => {
-  // get id from props
-  // call getPictures by x, y
-  // save article information on state
-  // mapping it
+const Articles = ({route, navigation}) => {
+  const [posts, setPosts] = useState([]);
+  let what = [];
 
-  const [posts, setPosts] = useState(getArticles(props.id));
-  
+  const getArticles = (id) => {
+    let url = Constant.baseURL + "/location/getPictures/" + id;
+    let token = "";
+    let posts = [];
+    
+    AsyncStorage.getItem('token', (error, result) => {
+      token = result;
+      axios.get(url, {headers: {'Authorization': `token ${token}`}})
+        .then((response) => {
+          const posts_ = response.data.posts;
+          setPosts(posts_);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      });
+  }
+
+  useEffect(()=>{
+    getArticles(route.params.id);
+  }, []);
+
   return (
     <ScrollView style={styles.back}>
       <Text style={styles.titleText}>
         이 위치에 남겨진 {posts.length}개의 왔다감
       </Text>
       <View style={{marginBottom: 32}}>
-        {Object.values(posts).map((post) => (
-          <View key={post.postid} style={styles.postBox}>
+        {Object.values(posts).map((post, index) => (
+          <View key={index} style={styles.postBox}>
             <SingleArticle
               userid={post.author.id}
               username={post.author.user_name}
-              time={post.created_at}
+              time={post.created_at.split("T")[0]}
               postid={post.postid}
-              content={post.content}
+              contents={post.contents}
               picture={post.picture}
+              profileimg={Constant.baseURL + post.author.profile_img}
             />
           </View>
         ))}
