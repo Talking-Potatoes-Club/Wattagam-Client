@@ -10,7 +10,7 @@ import ARCameraModule from "./ARCameraModule";
 const Example = requireNativeComponent('WattagamARCameraView');
 
 
-const CameraPage = ({navigation}) => {
+const CameraPage = ({route, navigation}) => {
 
   useEffect(()=> {
     const requestPermission = async () => {
@@ -44,7 +44,11 @@ const CameraPage = ({navigation}) => {
           size="70"
           onPressOut={() => {
             ARCameraModule.capture("filename"); 
-            navigation.navigate("PostWrite");
+            navigation.navigate('PostWrite', {
+              latitude: route.params.latitude,
+              longitude: route.params.longitude,
+              imgsrc: Constant.testImg,
+            });
           }}
         />
       </View>
