@@ -68,11 +68,10 @@ const MyPage = ({navigation}) => {
       <ProfileSection />
       <View style = {[styles.postTab,
       {
-          position: "absolute",
-          top: 175,
-          right: 160,
-        //  left: 250,
-          alignItems: "center", 
+          flex: 0.4,
+          marginTop: 30,
+          marginBottom: -12,
+          alignItems: "center",
           justifyContent: "center",
       }]}>
 
