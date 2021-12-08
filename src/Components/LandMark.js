@@ -4,7 +4,20 @@ import { theme } from "../Theme";
 import BubbleMarker from "./bubbleMarker";
 
 const LandMark = props => {
-  if(Number(props.num) > 20){
+  if(Number(props.num) > 30){
+    return (
+      <View>
+        <BubbleMarker
+          num={props.num}
+        />
+        <Image
+          style={styles.image}
+          source={require('../../assets/landmark_3x.png')}
+        />
+      </View>
+    )
+  }
+  else if (Number(props.num) > 20) {
     return (
       <View>
         <BubbleMarker
@@ -17,9 +30,12 @@ const LandMark = props => {
       </View>
     )
   }
-  else {
-    return(
+  else if (Number(props.num) > 10) {
+    return (
       <View>
+        <BubbleMarker
+          num={props.num}
+        />
         <Image
           style={styles.image}
           source={require('../../assets/landmark_1x.png')}

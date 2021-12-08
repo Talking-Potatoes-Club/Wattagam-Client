@@ -1,13 +1,14 @@
 import React from "react";
 import {View, Text, Image, StyleSheet} from "react-native";
 import { ImageButton } from "./Components/Button";
+import { Constant } from "./Constant";
 import { images } from './Images';
 
-const CameraPage = ({navigation}) => {
+const CameraPage = ({route, navigation}) => {
   return(
     <View>
       <Image
-        source={require('../assets/temp.png')}
+        source={{uri: Constant.testImg}}
         style={styles.image}
       />
       <View style={{position: "absolute", top: 16, left: 16}}>
@@ -21,7 +22,11 @@ const CameraPage = ({navigation}) => {
         <ImageButton
           type={images.cameraIcon}
           size="70"
-          onPressOut={() => navigation.navigate('PostWrite')}
+          onPressOut={() => navigation.navigate('PostWrite', {
+            latitude: route.params.latitude,
+            longitude: route.params.longitude,
+            imgsrc: Constant.testImg,
+          })}
         />
       </View>
     </View>

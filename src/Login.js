@@ -4,6 +4,7 @@ import { theme } from "./Theme";
 import {ColorButton, OutlineButton} from "./Components/Button";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Constant } from "./Constant";
 
 const LoginPage = ({navigation}) => {
   const [email, onChangeEmail] = useState("");
@@ -57,7 +58,7 @@ const LoginPage = ({navigation}) => {
               flex="1"
               onPress={() => {
                 console.log(email + ", " + password);
-                axios.post('http://wattagam-test-server.herokuapp.com/account/logIn', {
+                axios.post(Constant.baseURL + '/account/logIn', {
                   email : email,
                   password : password,
                 })
@@ -130,7 +131,7 @@ const FindPW = ({navigation}) => {
             title="비밀번호 찾기"
             onPress={()=>{
               email!=""?
-                axios.post('http://wattagam-test-server.herokuapp.com/account/tempPassword', {
+                axios.post(Constant.baseURL + '/account/tempPassword', {
                     email : email,
                   })
                   .then((response) => {
