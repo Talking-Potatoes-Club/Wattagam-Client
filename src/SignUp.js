@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity} from 'r
 import { theme } from "./Theme";
 import {ColorButton, OutlineButton} from "./Components/Button";
 import axios from "axios";
+import { Constant } from "./Constant";
 
 const SignUpPage = ({navigation}) => {
   const [email, onChangeEmail] = useState("");
@@ -60,7 +61,7 @@ const SignUpPage = ({navigation}) => {
               title="회원가입"
               onPress={() => {
                 console.log(userName + ", " + email + ", " + password);
-                axios.post('http://wattagam-test-server.herokuapp.com/account/signUp', {
+                axios.post(Constant.baseURL + '/account/signUp', {
                   email : email,
                   password : password,
                   user_name : userName,

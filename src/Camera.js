@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import {View, Text, Image, StyleSheet} from "react-native";
 import { ImageButton } from "./Components/Button";
+import { Constant } from "./Constant";
 import { images } from './Images';
 import { requireNativeComponent } from 'react-native';
 import { PermissionsAndroid } from "react-native";
 import ARCameraModule from "./ARCameraModule";
 
 const Example = requireNativeComponent('WattagamARCameraView');
+
 
 const CameraPage = ({navigation}) => {
 

@@ -6,6 +6,9 @@ import { ColorButton, ImageButton } from "./Components/Button";
 import { images } from './Images'
 import BubbleMarker from "./Components/bubbleMarker";
 import LandMark from "./Components/LandMark";
+import axios from "axios";
+import { Constant } from "./Constant";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const requestPermission = async () => {
   try {
@@ -30,15 +33,35 @@ const requestPermission = async () => {
 const Home = ({navigation}) => {
   const [latitude, setLatitude] = useState(37.555141);
   const [longitude, setLongitude] = useState(126.936949);
-  
+  const [markers, setMarkers] = useState([]);
+
   const granted = requestPermission();
   
+  const getMarkers = (x, y) => {
+    const url = Constant.baseURL + '/location/getLocationCount?x=' + x + '&y=' + y;
+
+    let token = "";
+    AsyncStorage.getItem('token', (error, result) => {
+      console.log("Token Loaded : " + result);
+      token = result;
+      axios.get(url, {headers: {'Authorization': `token ${token}`}})
+        .then((response) => {
+          console.log(response);
+          setMarkers(response.data.mapLocation);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      });
+  }
+
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
         console.log(position);
         setLatitude(Number(position.coords.latitude));
         setLongitude(Number(position.coords.longitude));
+        getMarkers(latitude, longitude);
       },
       error => {
         console.log(error);
@@ -46,7 +69,7 @@ const Home = ({navigation}) => {
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
   }, []);
-  
+
   return (
     <View style={{flex: 1}}>
       <MapView
@@ -59,21 +82,17 @@ const Home = ({navigation}) => {
           longitudeDelta: 0.002,
         }}
       >
-        <Marker coordinate={{latitude: 37.556101, longitude: 126.935822}}>
-          <BubbleMarker num="8"/>
-        </Marker>
-
-        <Marker coordinate={{latitude: 37.555727, longitude: 126.937056}}>
-          <BubbleMarker num="5"/>
-        </Marker>
-
-        <Marker coordinate={{latitude: 37.556448, longitude: 126.937166}}>
-          <BubbleMarker num="9"/>
-        </Marker>
-
-        <Marker coordinate={{latitude: 37.557008, longitude: 126.936718}}>
-          <LandMark num="25"/>
-        </Marker>
+        {Object.values(markers).map((marker) => (
+          <Marker
+            key={marker.location_id}
+            coordinate={{latitude: marker.x_location, longitude: marker.y_location}}
+            onPress={()=>navigation.navigate('Articles', {
+              id: marker.location_id,
+            })}
+          >
+            {marker.location_count < 10 ? <BubbleMarker num={String(marker.location_count)} /> : <LandMark num={String(marker.location_count)}/>}
+          </Marker> 
+        ))}
 
       </MapView>
       <View style={{flexDirection: "row", width: '100%', position: "absolute", bottom: 30, alignItems: "center", justifyContent: "center"}}>
@@ -81,17 +100,21 @@ const Home = ({navigation}) => {
           type={images.peopleIcon}
           size="50"
           whiteBackground="true"
-          onPressOut={() => navigation.navigate('SingleArticle')}
+          onPressOut={() => navigation.navigate('Articles')}
         />
         <ImageButton
           type={images.cameraIcon}
           size="70"
-          onPressOut={() => navigation.navigate('Camera')}
+          onPressOut={() => navigation.navigate('Camera', {
+            latitude: latitude,
+            longitude: longitude,
+          })}
         />
         <ImageButton
           type={images.myPageIcon}
           size="50"
           whiteBackground="true"
+          onPressOut={() => navigation.navigate('MyPage')}
         />
       </View>
     </View>

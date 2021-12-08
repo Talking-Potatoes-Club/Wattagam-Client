@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { theme } from '../Theme';
 import { IconButton } from './Button';
 import { images } from '../Images';
+import { Constant } from '../Constant';
 
-const ProfileImage = () => {
+const ProfileImage = props => {
   return (
     <Image
       style={styles.profileImage}
-      source={require('../../assets/bear.jpg')}
+      source={{uri: props.profileimg}}
     />
   )
 }
 
-const ProfileSection = () => {
+const ProfileSection = props => {
   return (
     <View
       style={{
@@ -27,6 +28,7 @@ const ProfileSection = () => {
       <View style={{flexDirection: 'row',}}>
         <ProfileImage 
           style={{ marginLeft: 16, marginRight: 16 }}
+          profileimg={props.profileimg}
         />
         <View
           style={{
@@ -34,8 +36,8 @@ const ProfileSection = () => {
             marginLeft: 16,
           }}
         >
-          <Text style={styles.userName}>UserName</Text>
-          <Text>Location</Text>
+          <Text style={styles.userName}>{props.username}</Text>
+          <Text>{props.time}</Text>
         </View>
       </View>
       <IconButton
@@ -45,28 +47,30 @@ const ProfileSection = () => {
   )
 }
 
-const SingleArticle = () => {
-  const imageSrc = "../../assets/bear.jpg";
-  let imageRatio = 1;
+const SingleArticle = props => {
+  //const imageSrc = "http://wattagam-test-server.herokuapp.com" + props.picture;
+  const imageSrc = Constant.baseURL + props.picture;
+  const [imageRatio, setImageRatio] = useState(1);
 
-  imageRatio = Image.resolveAssetSource(require(imageSrc)).width / Image.resolveAssetSource(require(imageSrc)).height;
-  
-  // ***** Is not working for local Image.
-  // ***** We have to replace it when we adjust it
-  // Image.getSize(imageSrc, (width, height) => {
-  //   imageRatio = width / height;
-  // })
+  Image.getSize(imageSrc, (width, height) => {
+    setImageRatio(width / height);
+  })
   
   return (
-    <View style={{borderColor: theme.stroke, borderWidth: 1,}}>
-      <ProfileSection /> 
+    <View>
+      <ProfileSection
+        userid={props.userid}
+        username={props.username}
+        time={props.time}
+        profileimg={props.profileimg}
+      /> 
       <View>
         <Image
-          style={[styles.contentsImage, {aspectRatio : imageRatio}]}
-          source={require(imageSrc)}
+          style={[styles.contentsImage, {aspectRatio: imageRatio}]}
+          source={{uri: imageSrc}}
         />
         <Text style={styles.contentsText}>
-          본문 내용이 들어가는 공간입니다. dfdfdfdfdfdfdf fdfdf fd f dfd d fdfdfdfd f dfdfdf df fd fdf d
+          {props.contents}
         </Text>
       </View>
     </View>
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    fontWeight: "Bold",
+    fontWeight: "bold",
     color: theme.textColor,
   },
   caption: {
@@ -93,7 +97,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     resizeMode: "contain",
-    backgroundColor: theme.mainColor,
+    aspectRatio: 0.7,
+    //backgroundColor: theme.mainColor,
   },
   contentsText: {
     color: theme.textColor,

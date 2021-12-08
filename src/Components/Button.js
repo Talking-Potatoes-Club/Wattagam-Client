@@ -99,7 +99,6 @@ const IconButton = (props) => {
         style={{
           height: Number(props.size),
           width: Number(props.size),
-          color: props.color,
         }}
         source={props.type}
       />
