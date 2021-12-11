@@ -59,8 +59,8 @@ const Home = ({navigation}) => {
     Geolocation.getCurrentPosition(
       position => {
         console.log(position);
-        setLatitude(Number(position.coords.latitude));
-        setLongitude(Number(position.coords.longitude));
+       // setLatitude(Number(position.coords.latitude));
+       // setLongitude(Number(position.coords.longitude));
         getMarkers(latitude, longitude);
       },
       error => {

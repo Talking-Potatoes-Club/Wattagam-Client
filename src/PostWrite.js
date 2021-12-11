@@ -6,6 +6,7 @@ import { images } from './Images'
 import axios from "axios";
 import { Constant } from "./Constant";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ImgToBase64 from 'react-native-image-base64';
 
 const PostWrite = ({route, navigation}) => {
   const [contents, setContents] = useState("");  
@@ -27,7 +28,7 @@ const PostWrite = ({route, navigation}) => {
 
   const uploadComplete = () => {
     Alert.alert("게시글 작성", "게시글이 업로드되었습니다!", [
-      { text: "확인", onPress: () => navigation.goBack() }
+      { text: "확인", onPress: () => navigation.reset({routes: [{name: 'Home'}]}) }
     ]);
   }
 
@@ -102,23 +103,30 @@ const PostWrite = ({route, navigation}) => {
             AsyncStorage.getItem('token', (error, result) => {
               console.log("Token Loaded : " + result);
               token = result;
-              axios.post(Constant.baseURL + "/location/newPicture", {
-                x_location: latitude,
-                y_location: longitude,
-                location_name : "temp",
-                picture: imgsrc.split(',')[1],
-                contents: contents,
-              },{
-                headers: {'Authorization': `token ${token}`}
+              ImgToBase64.getBase64String(imgsrc)
+              .then(base64String => {
+                axios.post(Constant.baseURL + "/location/newPicture", {
+                  x_location: latitude,
+                  y_location: longitude,
+                  location_name : "temp",
+                  picture: base64String,
+                  contents: contents,
+                },{
+                  headers: {'Authorization': `token ${token}`}
+                })
+                .then((response)=>{
+                  //console.log(response);
+                  uploadComplete();
+                })
+                .catch((error)=>{
+                  console.log(error.response);
+                  //console.log(latitude + ", " + longitude + ", " + token + ", " + contents);
+                })
               })
-              .then((response)=>{
-                //console.log(response);
-                uploadComplete();
+              .catch(err =>{
+                console.log(err);
               })
-              .catch((error)=>{
-                console.log(error.response);
-                //console.log(latitude + ", " + longitude + ", " + token + ", " + contents);
-              })
+
             });
           }}
         />
