@@ -130,7 +130,7 @@ public class  ARCameraFragment extends ArFragment{
                 });
 
         Texture.builder()
-                .setSource(context, R.drawable.canonical_face_texture)
+                .setSource(context, R.drawable.fox_face_mesh_texture)
                 .build()
                 .thenAccept(texture -> {
                     this.texture = texture;

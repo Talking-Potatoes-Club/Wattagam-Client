@@ -30,6 +30,8 @@ public class ARCameraModule extends ReactContextBaseJavaModule {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @ReactMethod
     public void capture(String filename){
+       // Toast.makeText(reactContext, "Hello!", Toast.LENGTH_LONG).show();
         CaptureUtil.captureView(ARCameraFragment.arSceneView, filename);
+      //  Toast.makeText(reactContext, msg, Toast.LENGTH_LONG).show();
     }
 }

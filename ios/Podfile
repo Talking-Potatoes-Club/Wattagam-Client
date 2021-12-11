@@ -12,6 +12,8 @@ target 'wattagam' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-image-base64', :path => '../node_modules/react-native-image-base64'
+
   target 'wattagamTests' do
     inherit! :complete
     # Pods for testing
