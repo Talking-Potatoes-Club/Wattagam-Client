@@ -57,19 +57,17 @@ const LoginPage = ({navigation}) => {
               title="로그인"
               flex="1"
               onPress={() => {
-                console.log(email + ", " + password);
                 axios.post(Constant.baseURL + '/account/logIn', {
                   email : email,
                   password : password,
                 })
                 .then((response) => {
-                  console.log(response);
-                  console.log(response.data.token);
                   AsyncStorage.setItem('token', response.data.token);
+                  AsyncStorage.setItem('user_id', response.data.userInfo.id.toString());
                   AsyncStorage.getItem('token', (error, result) => {
                     console.log("Token Saved : " + result);
                   });
-                  navigation.navigate("Home");
+                  navigation.reset({routes: [{name: 'Home'}]});
                 })
                 .catch((error) => {
                   console.log(error);
