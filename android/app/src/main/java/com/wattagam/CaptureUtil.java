@@ -26,7 +26,7 @@ import java.io.OutputStream;
 
 public class CaptureUtil {
     // 캡쳐가 저장될 외부 저장소
-    private static final String CAPTURE_PATH = "/CAPTURE_TEST";
+    public static String CAPTURE_PATH;
 
     /**
      * 특정 뷰만 캡쳐
@@ -76,7 +76,7 @@ public class CaptureUtil {
     public static String SaveToFile(Bitmap captureView, String filename){
         FileOutputStream fos;
 
-        String strFolderPath = Environment.getExternalStorageDirectory().getAbsolutePath() ;//+ CAPTURE_PATH;
+        String strFolderPath = CAPTURE_PATH;
         File folder = new File(strFolderPath);
         if (!folder.exists()) {
             folder.mkdirs();
@@ -89,7 +89,7 @@ public class CaptureUtil {
             fos = new FileOutputStream(fileCacheItem);
             captureView.compress(Bitmap.CompressFormat.PNG, 100, fos);
 
-            return "Success";
+            return strFilePath;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
