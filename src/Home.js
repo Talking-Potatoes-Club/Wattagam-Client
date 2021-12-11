@@ -34,6 +34,7 @@ const Home = ({navigation}) => {
   const [latitude, setLatitude] = useState(37.555141);
   const [longitude, setLongitude] = useState(126.936949);
   const [markers, setMarkers] = useState([]);
+  const [isLoaded, setLoaded] = useState(false);
 
   const granted = requestPermission();
   
@@ -62,6 +63,7 @@ const Home = ({navigation}) => {
        // setLatitude(Number(position.coords.latitude));
        // setLongitude(Number(position.coords.longitude));
         getMarkers(latitude, longitude);
+        setLoaded(true);
       },
       error => {
         console.log(error);
@@ -72,6 +74,7 @@ const Home = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
+      {isLoaded ? 
       <MapView
         style={{ flex: 1 }}
         provider={PROVIDER_GOOGLE}
@@ -95,6 +98,7 @@ const Home = ({navigation}) => {
         ))}
 
       </MapView>
+      : <View style={{flex: 1, backgroundColor: "#eeeeee"}}></View>}
       <View style={{flexDirection: "row", width: '100%', position: "absolute", bottom: 30, alignItems: "center", justifyContent: "center"}}>
         <ImageButton
           type={images.peopleIcon}
