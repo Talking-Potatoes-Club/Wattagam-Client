@@ -25,7 +25,7 @@ const Articles = ({route, navigation}) => {
           setPosts(posts_);
         })
         .catch((error) => {
-          console.log(error);
+          console.log("Articles: " + error);
         });
       });
   }
@@ -46,10 +46,11 @@ const Articles = ({route, navigation}) => {
               userid={post.author.id}
               username={post.author.user_name}
               time={post.created_at.split("T")[0]}
-              postid={post.postid}
+              postid={post.id}
               contents={post.contents}
               picture={post.picture}
               profileimg={Constant.baseURL + post.author.profile_img}
+              showUserPage={()=>navigation.navigate('MyPage', {id: post.author.id})}
             />
           </View>
         ))}

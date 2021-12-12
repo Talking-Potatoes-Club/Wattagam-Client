@@ -48,7 +48,11 @@ const PostWrite = ({route, navigation}) => {
       "hardwareBackPress",
       backAction
     );
-    return() => backHandler.remove();
+    return() => 
+    {
+      console.log("backhandler removed");
+      backHandler.remove()
+    };
   }, []);
 
   return (
@@ -115,16 +119,14 @@ const PostWrite = ({route, navigation}) => {
                   headers: {'Authorization': `token ${token}`}
                 })
                 .then((response)=>{
-                  //console.log(response);
                   uploadComplete();
                 })
                 .catch((error)=>{
-                  console.log(error.response);
-                  //console.log(latitude + ", " + longitude + ", " + token + ", " + contents);
+                  console.log("PostWrite: " + error);
                 })
               })
               .catch(err =>{
-                console.log(err);
+                console.log("PostWrite: " + err);
               })
 
             });

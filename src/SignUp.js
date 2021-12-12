@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Dimensions, Alert} from 'react-native';
 import { theme } from "./Theme";
 import {ColorButton, OutlineButton} from "./Components/Button";
 import axios from "axios";
@@ -10,6 +10,16 @@ const SignUpPage = ({navigation}) => {
   const [password, onChangePW] = useState("");
   const [userName, onChangeUsername] = useState("");
   const [isFailed, onFailed] = useState(0);
+
+  const succesAlert = () => {
+    Alert.alert("회원가입 성공", "회원가입에 성공했습니다! \n로그인을 마저 진행해주세요.", [
+      {
+        text: "확인",
+        onPress: () => navigation.reset({routes: [{name: 'Login'}]})
+      }
+    ])
+  }
+
   return (
     <View
       style={{
@@ -32,7 +42,7 @@ const SignUpPage = ({navigation}) => {
           }}
         >
           <TextInput
-            style={[styles.TextBox, isFailed == 500 ? {borderColor: theme.dangerColor} : null]}
+            style={[styles.TextBox, isFailed == 400 ? {borderColor: theme.dangerColor} : null]}
             placeholder="Username"
             onChangeText={text => onChangeUsername(text)}
           />
@@ -60,7 +70,6 @@ const SignUpPage = ({navigation}) => {
             <ColorButton 
               title="회원가입"
               onPress={() => {
-                console.log(userName + ", " + email + ", " + password);
                 axios.post(Constant.baseURL + '/account/signUp', {
                   email : email,
                   password : password,
@@ -68,11 +77,10 @@ const SignUpPage = ({navigation}) => {
                   bio: "안녕하세요! " + userName + "입니다.",
                 })
                 .then((response) => {
-                  console.log(response);
-                  navigation.reset({routes: [{name: 'SignUpSuccess'}]});
+                  succesAlert();
                 })
                 .catch((error) => {
-                  console.log(error.response);
+                  console.log("SignUp: " + error);
                   onFailed(error.response.status);
                 });
                 
@@ -90,35 +98,6 @@ const SignUpPage = ({navigation}) => {
 }
 
 
-const SignUpSuccess = ({navigation}, props) => {
-  return(
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-        }}
-      >
-        <Text style={{padding: 8}}>
-          회원가입이 완료되었습니다
-        </Text>
-        <Text style={{padding: 8}}>
-          로그인을 마저 진행해주세요!
-        </Text>
-        <ColorButton 
-          title="로그인 페이지로 돌아가기"
-          onPress={()=>navigation.reset({routes: [{name: 'Login'}]})}
-        />
-      </View>
-    </View>
-  )
-}
-
 const styles=StyleSheet.create({
   TextBox:{
     // width: '100%',
@@ -131,4 +110,4 @@ const styles=StyleSheet.create({
   }
 })
 
-export {SignUpPage, SignUpSuccess};
+export {SignUpPage};

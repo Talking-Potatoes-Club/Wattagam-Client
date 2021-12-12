@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useState, useEffect} from "react";
 import {StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity} from 'react-native';
 import { theme } from "./Theme";
 import {ColorButton, OutlineButton} from "./Components/Button";
@@ -10,6 +10,14 @@ const LoginPage = ({navigation}) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePW] = useState("");
   const [isFailed, onFailed] = useState(false);
+
+  useEffect(()=> {
+    AsyncStorage.getItem('token', (error, result)=>{
+      if (result && result != ""){
+        navigation.reset({routes: [{name: 'Home'}]});
+      }
+    });
+  }, []);
 
   return (
     <View
@@ -70,7 +78,7 @@ const LoginPage = ({navigation}) => {
                   navigation.reset({routes: [{name: 'Home'}]});
                 })
                 .catch((error) => {
-                  console.log(error);
+                  console.log("Login Page : " + error);
                   onFailed(true);
                 });
               }}
@@ -133,13 +141,9 @@ const FindPW = ({navigation}) => {
                     email : email,
                   })
                   .then((response) => {
-                    console.log(email);
-                    console.log(response);
                     onMailSended(true);
                   })
                   .catch((error) => {
-                    console.log(error);
-                    console.log(email);
                     onFailed(true);
                   })
                 :onFailed(true);

@@ -51,10 +51,11 @@ const ArticleSection = props => {
   )
 }
 
-const MyPage = ({navigation}) => {
+const UserPage = ({route, navigation}) => {
   const [userData, setUserData] = useState([]);
   const [posts, setPosts] = useState([]);
   const [isLoaded, setLoaded] = useState(false);
+  const [loginUser, setLoginUser] = useState(null);
 
   // useFocusEffect(
   //   React.useCallback(()=>{
@@ -71,23 +72,25 @@ const MyPage = ({navigation}) => {
     });
 
     const getData = () => {
-      AsyncStorage.getItem('user_id', (error, result)=>{
-        const url = Constant.baseURL + "/account/getUserInfo/" + result;
-        AsyncStorage.getItem('token', (error, result)=>{
+      const url = Constant.baseURL + "/account/getUserInfo/" + route.params.id;
+      AsyncStorage.getItem('token', (error, result)=>{
+        if (!error && result != null && result != ""){
           axios.get(url, {headers: {'Authorization': `token ${result}`}}) 
           .then(response => {
-            console.log(response);
             setUserData(response.data);
             setPosts(response.data.pictures);
             setLoaded(true);
           })
           .catch(error => {
-            console.log(error);
+            console.log("UserPage: " + error);
           });
-        })
+        }
       });
+      
     }
-
+    AsyncStorage.getItem('user_id', (error,result)=>{
+      setLoginUser(result);
+    })
     getData();
   }, []);
 
@@ -99,13 +102,9 @@ const MyPage = ({navigation}) => {
         flexDirection: "column",
         backgroundColor: theme.mainColor,
       }}
-    >
-      <View style={{position: "absolute", left: 16, top: 16}}>
-        <IconButton
-          type={images.backIcon}
-          onPressOut={() => navigation.goBack()}
-        />
-      </View>
+    > 
+    {
+      loginUser == route.params.id ?
       <View style={{position: "absolute", right: 16, top: 16}}>
         <IconButton
           type={images.settingIcon}
@@ -115,7 +114,15 @@ const MyPage = ({navigation}) => {
             profile_img: Constant.baseURL + userData.userInfo.profile_img,
           })}
         />
+      </View> : null
+    }
+      <View style={{position: "absolute", left: 16, top: 16}}>
+        <IconButton
+          type={images.backIcon}
+          onPressOut={() => navigation.goBack()}
+        />
       </View>
+      
       {isLoaded ? 
         <ProfileSection
           source={Constant.baseURL + userData.userInfo.profile_img}
@@ -147,6 +154,7 @@ const MyPage = ({navigation}) => {
                     contents={post.contents}
                     picture={post.picture}
                     profileimg={Constant.baseURL + post.author.profile_img}
+                    showUserPage={()=>navigation.navigate('MyPage', {id: post.author.id})}
                   />
                 </View>
               ))}
@@ -180,4 +188,4 @@ const styles=StyleSheet.create({
   }
 })
 
-export default MyPage;
+export default UserPage;
