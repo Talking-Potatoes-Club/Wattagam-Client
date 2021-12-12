@@ -130,7 +130,7 @@ public class  ARCameraFragment extends ArFragment{
                 });
 
         Texture.builder()
-                .setSource(context, R.drawable.fox_face_mesh_texture)
+                .setSource(context, R.drawable.lips)
                 .build()
                 .thenAccept(texture -> {
                     this.texture = texture;
@@ -161,12 +161,29 @@ public class  ARCameraFragment extends ArFragment{
 
         arSceneView = getArSceneView();
     }
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        View view = getView();
+//        if(view != null){
+//            ViewGroup parent = (ViewGroup)view.getParent();
+//            if(parent!=null){
+//                parent.removeView(view);
+//            }
+//        }
+//    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FrameLayout frameLayout = (FrameLayout) super.onCreateView(inflater, container, savedInstanceState);
 
+        FrameLayout frameLayout = (FrameLayout) super.onCreateView(inflater, container, savedInstanceState);
+//        if(frameLayout != null){
+//            ViewGroup parent = (ViewGroup)frameLayout.getParent();
+//            if(parent!=null){
+//                parent.removeView(frameLayout);
+//            }
+//        }
         getPlaneDiscoveryController().hide();
         getPlaneDiscoveryController().setInstructionView(null);
 

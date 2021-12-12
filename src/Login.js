@@ -12,11 +12,11 @@ const LoginPage = ({navigation}) => {
   const [isFailed, onFailed] = useState(false);
 
   useEffect(()=> {
-    AsyncStorage.getItem('token', (error, result)=>{
-      if (result && result != ""){
-        navigation.reset({routes: [{name: 'Home'}]});
-      }
-    });
+    // AsyncStorage.getItem('token', (error, result)=>{
+    //   if (result && result != ""){
+    //     navigation.reset({routes: [{name: 'Home'}]});
+    //   }
+    // });
   }, []);
 
   return (
