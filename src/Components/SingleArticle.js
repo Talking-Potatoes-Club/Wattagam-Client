@@ -1,51 +1,13 @@
 import React, { useEffect, useState} from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert, TouchableOpacity, Touchable } from 'react-native';
 import { theme } from '../Theme';
 import { IconButton } from './Button';
 import { images } from '../Images';
 import { Constant } from '../Constant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const ProfileImage = props => {
-  return (
-    <Image
-      style={styles.profileImage}
-      source={{uri: props.profileimg}}
-    />
-  )
-}
 
-const ProfileSection = props => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-      }}
-    >
-      <View style={{flexDirection: 'row',}}>
-        <ProfileImage 
-          style={{ marginLeft: 16, marginRight: 16 }}
-          profileimg={props.profileimg}
-        />
-        <View
-          style={{
-            flexDirection: 'column',
-            marginLeft: 16,
-          }}
-        >
-          <Text style={styles.userName}>{props.username}</Text>
-          <Text>{props.time}</Text>
-        </View>
-      </View>
-      <IconButton
-        type={images.MoreIcon}
-      />
-    </View>
-  )
-}
 
 const SingleArticle = props => {
   //const imageSrc = "http://wattagam-test-server.herokuapp.com" + props.picture;
@@ -56,14 +18,95 @@ const SingleArticle = props => {
     setImageRatio(width / height);
   })
   
+  const deleteAlert = postid => {
+    Alert.alert("게시글 삭제", "게시글을 삭제하시겠습니까?", [
+      {
+        text: "취소",
+        onPress: () => null
+      },
+      {
+        text: "삭제",
+        onPress: () => {
+          AsyncStorage.getItem('token', (error, token) =>{
+            axios.delete(Constant.baseURL + "/location/myPicture/" + postid,
+              {headers: {'Authorization': `token ${token}`}}
+            )
+            .then(response => {
+              Alert.alert("게시글 삭제 완료", "삭제가 완료되었습니다.", [
+                {
+                  text: "확인",
+                  onPress: () => null
+                }
+              ])
+            })
+            .catch(error=>{
+              console.log("SingleArticle: " + error);
+            })
+          })
+          
+        }
+      }
+    ])
+  }
+
+  const ProfileImage = props => {
+    return (
+      <Image
+        style={styles.profileImage}
+        source={{uri: props.profileimg}}
+      />
+    )
+  }
+  
+  const ProfileSection = props => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingHorizontal: 8,
+          paddingVertical: 8,
+        }}
+      >
+        <View style={{flexDirection: 'row',}}>
+          <ProfileImage 
+            style={{ marginLeft: 16, marginRight: 16 }}
+            profileimg={props.profileimg}
+          />
+          <View
+            style={{
+              flexDirection: 'column',
+              marginLeft: 8,
+            }}
+          >
+            <Text style={styles.userName}>{props.username}</Text>
+            <Text>{props.time}</Text>
+          </View>
+        </View>
+        <IconButton
+          type={images.MoreIcon}
+          onPressOut={()=>{
+            AsyncStorage.getItem('user_id', (error, result)=>{
+              result == props.userid ? deleteAlert(props.postid) : null;
+            })
+          }}
+        />
+      </View>
+    )
+  }
+
   return (
     <View>
-      <ProfileSection
-        userid={props.userid}
-        username={props.username}
-        time={props.time}
-        profileimg={props.profileimg}
-      /> 
+      <TouchableOpacity onPress={props.showUserPage}>
+        <ProfileSection
+          userid={props.userid}
+          username={props.username}
+          time={props.time}
+          profileimg={props.profileimg}
+          postid={props.postid}
+        /> 
+      </TouchableOpacity>
       <View>
         <Image
           style={[styles.contentsImage, {aspectRatio: imageRatio}]}

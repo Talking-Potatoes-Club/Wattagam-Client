@@ -36,8 +36,6 @@ const Home = ({navigation}) => {
   const [markers, setMarkers] = useState([]);
   const [isLoaded, setLoaded] = useState(false);
 
-  const granted = requestPermission();
-  
   const getMarkers = (x, y) => {
     const url = Constant.baseURL + '/location/getLocationCount?x=' + x + '&y=' + y;
 
@@ -47,22 +45,22 @@ const Home = ({navigation}) => {
       token = result;
       axios.get(url, {headers: {'Authorization': `token ${token}`}})
         .then((response) => {
-          console.log(response);
           setMarkers(response.data.mapLocation);
         })
         .catch((error) => {
-          console.log(error);
+          console.log("Home: " + error);
         });
       });
   }
 
   useEffect(() => {
+    requestPermission();
     Geolocation.getCurrentPosition(
       position => {
         console.log(position);
-       // setLatitude(Number(position.coords.latitude));
-       // setLongitude(Number(position.coords.longitude));
-        getMarkers(latitude, longitude);
+        setLatitude(Number(position.coords.latitude));
+        setLongitude(Number(position.coords.longitude));
+        getMarkers(Number(position.coords.latitude), Number(position.coords.longitude));
         setLoaded(true);
       },
       error => {
@@ -95,8 +93,9 @@ const Home = ({navigation}) => {
           >
             {marker.location_count < 10 ? <BubbleMarker num={String(marker.location_count)} /> : <LandMark num={String(marker.location_count)}/>}
           </Marker> 
-        ))}
-
+          ))
+        }
+          
       </MapView>
       : <View style={{flex: 1, backgroundColor: "#eeeeee"}}></View>}
       <View style={{flexDirection: "row", width: '100%', position: "absolute", bottom: 30, alignItems: "center", justifyContent: "center"}}>
@@ -118,7 +117,11 @@ const Home = ({navigation}) => {
           type={images.myPageIcon}
           size="50"
           whiteBackground="true"
-          onPressOut={() => navigation.navigate('MyPage')}
+          onPressOut={() => {
+            AsyncStorage.getItem('user_id', (error, result)=>{
+              navigation.navigate('MyPage', {id: result});
+            })
+          }}
         />
       </View>
     </View>
